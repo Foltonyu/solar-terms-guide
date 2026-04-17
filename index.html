@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>节气食光 - 二十四节气互动养生指南</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === RESET & BASE === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --ink: #1a1a2e;
+  --rice: #f5f0e8;
+  --jade: #2d6a4f;
+  --vermillion: #c1440e;
+  --gold: #b8860b;
+  --spring: #2d6a4f;
+  --summer: #e07a5f;
+  --autumn: #d4a017;
+  --winter: #4a6fa5;
+  --font-heading: 'Ma Shan Zheng', cursive;
+  --font-body: 'Noto Serif SC', serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--rice);
+  color: var(--ink);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* === SECTION TITLES === */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--ink);
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--ink), transparent);
+  margin: 0.5rem auto 0;
+}
+
+/* === HERO === */
+#hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a1a2e 0%, #2a2a4a 40%, #3a3a5a 60%, #f5f0e8 100%);
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 80%, rgba(45,106,79,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, rgba(193,68,14,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.mountains {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  pointer-events: none;
+}
+.mountains::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -5%;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(ellipse 100% 200% at 50% 100%, rgba(30,30,50,0.6) 0%, transparent 70%);
+  filter: blur(2px);
+}
+.mountains::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -5%;
+  width: 60%;
+  height: 80%;
+  background: radial-gradient(ellipse 100% 200% at 50% 100%, rgba(40,40,60,0.4) 0%, transparent 70%);
+  filter: blur(3px);
+}
+#particles-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(-100vh) translateX(50px) rotate(360deg); opacity: 0; }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--rice);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(4rem, 12vw, 8rem);
+  letter-spacing: 0.3em;
+  text-shadow: 0 0 40px rgba(245,240,232,0.3), 0 4px 20px rgba(0,0,0,0.5);
+  animation: fadeInUp 1.5s ease-out;
+  line-height: 1.2;
+}
+.hero-subtitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  letter-spacing: 0.5em;
+  margin-top: 0.5rem;
+  opacity: 0.85;
+  animation: fadeInUp 1.5s ease-out 0.3s both;
+}
+.hero-desc {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  margin-top: 1.5rem;
+  opacity: 0.7;
+  letter-spacing: 0.2em;
+  animation: fadeInUp 1.5s ease-out 0.6s both;
+}
+.hero-btn {
+  display: inline-block;
+  margin-top: 2.5rem;
+  padding: 0.8rem 2.5rem;
+  border: 1px solid rgba(245,240,232,0.5);
+  color: var(--rice);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  letter-spacing: 0.3em;
+  border-radius: 50px;
+  transition: all 0.4s;
+  animation: fadeInUp 1.5s ease-out 0.9s both;
+}
+.hero-btn:hover {
+  background: rgba(245,240,232,0.15);
+  border-color: var(--rice);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === FILTER === */
+#filter-section {
+  padding: 3rem 1rem 1rem;
+  background: var(--rice);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(26,26,46,0.1);
+}
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  padding: 0.5rem 1.8rem;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.3s;
+  letter-spacing: 0.15em;
+}
+.filter-btn:hover { background: rgba(26,26,46,0.08); }
+.filter-btn.active {
+  background: var(--ink);
+  color: var(--rice);
+}
+.filter-btn[data-season="spring"].active { background: var(--spring); border-color: var(--spring); }
+.filter-btn[data-season="summer"].active { background: var(--summer); border-color: var(--summer); }
+.filter-btn[data-season="autumn"].active { background: var(--autumn); border-color: var(--autumn); }
+.filter-btn[data-season="winter"].active { background: var(--winter); border-color: var(--winter); }
+
+/* === WHEEL === */
+#wheel-section {
+  padding: 4rem 1rem;
+  background: var(--rice);
+}
+#wheel-container {
+  position: relative;
+  width: min(500px, 90vw);
+  height: min(500px, 90vw);
+  margin: 0 auto;
+}
+#wheel-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+#wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--rice);
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(26,26,46,0.15);
+}
+#wheel-center-text {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* === CARDS === */
+#cards-section {
+  padding: 3rem 1rem 5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+#cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.term-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.8rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(26,26,46,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.term-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  transition: width 0.3s;
+}
+.term-card.spring::before { background: var(--spring); }
+.term-card.summer::before { background: var(--summer); }
+.term-card.autumn::before { background: var(--autumn); }
+.term-card.winter::before { background: var(--winter); }
+.term-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+}
+.term-card:hover::before { width: 6px; }
+.term-card.current-term {
+  border: 2px solid var(--vermillion);
+  box-shadow: 0 0 20px rgba(193,68,14,0.15);
+}
+.term-card.current-term::after {
+  content: '当前节气';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.7rem;
+  background: var(--vermillion);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+}
+.card-season-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.card-name {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 1.3;
+}
+.card-date {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+}
+.card-desc {
+  font-size: 0.92rem;
+  margin-top: 0.8rem;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+.card-foods {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.food-tag {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  background: rgba(26,26,46,0.06);
+  border: 1px solid rgba(26,26,46,0.1);
+}
+.card-hidden {
+  display: none !important;
+}
+
+/* === MODAL === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,46,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.modal-content {
+  background: var(--rice);
+  border-radius: 16px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 2.5rem;
+  position: relative;
+  transform: scale(1);
+  transition: transform 0.3s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-overlay.hidden .modal-content {
+  transform: scale(0.92);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.08); }
+.modal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(26,26,46,0.1);
+}
+.modal-name {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  line-height: 1.2;
+}
+.modal-date {
+  font-size: 0.95rem;
+  opacity: 0.6;
+  margin-top: 0.3rem;
+}
+.modal-desc {
+  font-size: 1rem;
+  margin-top: 1rem;
+  line-height: 1.8;
+}
+.modal-section {
+  margin-top: 1.8rem;
+}
+.modal-section h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.modal-section ul {
+  list-style: none;
+  padding: 0;
+}
+.modal-section li {
+  padding: 0.4rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+  font-size: 0.95rem;
+}
+.modal-section li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.modal-poem {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(26,26,46,0.04);
+  border-left: 3px solid var(--ink);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+.modal-poem .poem-text {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  line-height: 2;
+  white-space: pre-line;
+}
+.modal-poem .poem-author {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-top: 0.5rem;
+  text-align: right;
+  font-style: normal;
+}
+
+/* === FOOTER === */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--ink);
+  color: rgba(245,240,232,0.6);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .hero-title { letter-spacing: 0.15em; }
+  .hero-subtitle { letter-spacing: 0.2em; }
+  #cards-grid { grid-template-columns: 1fr; }
+  .section-title { font-size: 2rem; }
+  .modal-content { padding: 1.5rem; }
+  .modal-name { font-size: 2.2rem; }
+  #wheel-center { width: 70px; height: 70px; }
+  #wheel-center-text { font-size: 1rem; }
+  .filter-btn { font-size: 1.1rem; padding: 0.4rem 1.3rem; }
+}
+@media (max-width: 480px) {
+  #cards-grid { gap: 1rem; }
+  .term-card { padding: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO SECTION -->
+<section id="hero">
+  <div id="particles-container"></div>
+  <div class="mountains"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">节气食光</h1>
+    <p class="hero-subtitle">二十四节气互动养生指南</p>
+    <p class="hero-desc">顺应天时，食养合一，感受千年智慧的生活美学</p>
+    <a href="#wheel-section" class="hero-btn">探索节气</a>
+  </div>
+</section>
+
+<!-- SEASON FILTER -->
+<section id="filter-section">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-season="all">全部</button>
+    <button class="filter-btn" data-season="spring">春</button>
+    <button class="filter-btn" data-season="summer">夏</button>
+    <button class="filter-btn" data-season="autumn">秋</button>
+    <button class="filter-btn" data-season="winter">冬</button>
+  </div>
+</section>
+
+<!-- CIRCULAR WHEEL -->
+<section id="wheel-section">
+  <h2 class="section-title">二十四节气轮</h2>
+  <div id="wheel-container">
+    <canvas id="wheel-canvas"></canvas>
+    <div id="wheel-center">
+      <span id="wheel-center-text">节气</span>
+    </div>
+  </div>
+</section>
+
+<!-- CARDS GRID -->
+<section id="cards-section">
+  <h2 class="section-title">节气详览</h2>
+  <div id="cards-grid"></div>
+</section>
+
+<!-- DETAIL MODAL -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-content" class="modal-content">
+    <button id="modal-close" class="modal-close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>节气食光 &copy; 顺应自然，颐养天年</p>
+</footer>
+
+<script>
+const TERMS = [
+  {name:"立春",date:"2月3-5日",season:"spring",desc:"立春为二十四节气之首，标志着万物闭藏的冬季已过去，开始进入风和日暖、万物生长的春季。此时阳气初生，大地回暖，万物复苏。",foods:["春饼","豆芽","荠菜"],tips:["早睡早起，顺应阳气升发","多食辛甘发散之品，少食酸收之味","适当户外活动，舒展筋骨"],poem:"东风带雨逐西风，大地阳和暖气生。\n万物苏萌山水醒，农家岁首又谋耕。",poemAuthor:"左河水《立春》"},
+  {name:"雨水",date:"2月18-20日",season:"spring",desc:"雨水节气标示着降雨开始，雨量渐增。春雨贵如油，润泽万物，草木萌动，大地渐渐呈现一派欣欣向荣的景象。",foods:["红枣","蜂蜜","山药"],tips:["注意春捂，勿急减衣","健脾祛湿，调养脾胃","保持心情舒畅"],poem:"好雨知时节，当春乃发生。\n随风潜入夜，润物细无声。",poemAuthor:"杜甫《春夜喜雨》"},
+  {name:"惊蛰",date:"3月5-7日",season:"spring",desc:"惊蛰时节，春雷始鸣，惊醒蛰伏地下冬眠的昆虫。此时气温回升较快，桃花红、李花白，黄莺鸣叫、燕飞来，大自然生机盎然。",foods:["梨","菠菜","枸杞"],tips:["润肺止咳，多食梨","早睡早起，适当运动","注意预防流感"],poem:"微雨众卉新，一雷惊蛰始。\n田家几日闲，耕种从此起。",poemAuthor:"韦应物《观田家》"},
+  {name:"春分",date:"3月20-22日",season:"spring",desc:"春分日昼夜等长，是春季九十天的中分点。此后阳光直射点北移，北半球昼长夜短，春暖花开，莺飞草长。",foods:["香椿","春笋","韭菜"],tips:["调和阴阳，保持平衡饮食","踏青赏花，舒缓心情","注意花粉过敏防护"],poem:"雪入春分省见稀，半开桃李不胜威。\n应惭落地梅花识，却作漫天柳絮飞。",poemAuthor:"苏轼《癸丑春分后雪》"},
+  {name:"清明",date:"4月4-6日",season:"spring",desc:"清明时节，气清景明，万物皆显。既是节气也是传统节日，人们扫墓祭祖、踏青郊游。此时大地翠绿，繁花似锦。",foods:["青团","艾草","螺蛳"],tips:["外出踏青，亲近自然","饮食清淡，疏肝养肺","调节情志，保持乐观"],poem:"清明时节雨纷纷，路上行人欲断魂。\n借问酒家何处有，牧童遥指杏花村。",poemAuthor:"杜牧《清明》"},
+  {name:"谷雨",date:"4月19-21日",season:"spring",desc:"谷雨是春季最后一个节气，意为"雨生百谷"。此时降水增多，有利于谷类作物生长。牡丹花开，满城飘香，春将尽夏将至。",foods:["香椿芽","绿茶","桑葚"],tips:["谷雨饮茶，清肝明目","防潮祛湿，注意关节保养","饮食减酸增甘，养护脾胃"],poem:"谷雨如丝复似尘，煮瓶浮蜡正尝新。\n牡丹破萼樱桃熟，未许飞花减却春。",poemAuthor:"范成大《晚春田园杂兴》"},
+  {name:"立夏",date:"5月5-7日",season:"summer",desc:"立夏标志着夏季的开始，万物繁茂，气温显著升高。古人有"立夏尝新"的习俗，品尝时令鲜果，迎接热烈的夏天。",foods:["蚕豆","樱桃","青梅"],tips:["养心安神，午间小憩","清淡饮食，多食蔬果","避免大汗伤津"],poem:"四月清和雨乍晴，南山当户转分明。\n更无柳絮因风起，惟有葵花向日倾。",poemAuthor:"司马光《客中初夏》"},
+  {name:"小满",date:"5月20-22日",season:"summer",desc:"小满时节，麦类等夏熟作物籽粒渐饱满但未成熟，故称小满。此时天气渐热，雨水增多，预示着闷热潮湿的天气即将来临。",foods:["苦瓜","黄瓜","薏米"],tips:["清热利湿，健脾养胃","饮食宜清淡，忌辛辣油腻","适量运动，出汗排毒"],poem:"夜莺啼绿柳，皓月醒长空。\n最爱垄头麦，迎风笑落红。",poemAuthor:"欧阳修《小满》"},
+  {name:"芒种",date:"6月5-7日",season:"summer",desc:"芒种意为"有芒的麦子快收，有芒的稻子可种"。此时仲夏已至，暑气渐盛，是一年中最忙碌的农事时节。",foods:["杨梅","西瓜","绿豆"],tips:["防暑降温，补充水分","晚睡早起，适当午休","饮食清补，生津止渴"],poem:"时雨及芒种，四野皆插秧。\n家家麦饭美，处处菱歌长。",poemAuthor:"陆游《时雨》"},
+  {name:"夏至",date:"6月21-22日",season:"summer",desc:"夏至是北半球白昼最长的一天。此时骄阳似火，万物繁盛至极。民间有"吃过夏至面，一天短一线"的说法。",foods:["面条","荷叶","莲子"],tips:["静心养性，避免燥怒","多食苦味，清心降火","避免正午暴晒"],poem:"绿筠尚含粉，圆荷始散芳。\n于焉洒烦抱，可以对华觞。",poemAuthor:"韦应物《夏至避暑北池》"},
+  {name:"小暑",date:"7月6-8日",season:"summer",desc:"小暑时节天气开始炎热但未到最热。此时荷花盛开，蟋蟀鸣叫，人们以各种方式避暑消夏，享受夏日时光。",foods:["莲藕","绿豆汤","冬瓜"],tips:["避暑防热，多饮水","饮食宜清淡，少食生冷","保持充足睡眠"],poem:"倏忽温风至，因循小暑来。\n竹喧先觉雨，山暗已闻雷。",poemAuthor:"元稹《小暑六月节》"},
+  {name:"大暑",date:"7月22-24日",season:"summer",desc:"大暑是一年中最热的节气，湿热交蒸，酷暑难耐。民间有饮伏茶、晒伏姜、烧伏香等习俗，以度过漫长酷夏。",foods:["西瓜","苦瓜","薄荷"],tips:["避免中暑，减少户外活动","多食清热解暑之品","保持心情平静，心静自然凉"],poem:"何以消烦暑，端居一院中。\n眼前无长物，窗下有清风。",poemAuthor:"白居易《消暑》"},
+  {name:"立秋",date:"8月7-9日",season:"autumn",desc:"立秋标志着秋季的开始，暑去凉来。民间有"贴秋膘"习俗，因为盛夏食欲不佳，入秋后要补回来。梧桐叶落，秋风渐起。",foods:["茄子","南瓜","百合"],tips:["早卧早起，收敛神气","润肺防燥，多食白色食物","适量进补，贴秋膘"],poem:"乳鸦啼散玉屏空，一枕新凉一扇风。\n睡起秋色无觅处，满阶梧桐月明中。",poemAuthor:"刘翰《立秋》"},
+  {name:"处暑",date:"8月22-24日",season:"autumn",desc:"处暑即"出暑"，暑气至此而止。白天热，早晚凉，秋高气爽的天气逐渐到来。民间有放河灯、开渔节等习俗。",foods:["鸭肉","银耳","秋梨"],tips:["早睡早起，增加睡眠","滋阴润燥，多食汤羹","适当秋冻，增强体质"],poem:"离离暑云散，袅袅凉风起。\n池上秋又来，荷花半成子。",poemAuthor:"白居易《早秋曲江感怀》"},
+  {name:"白露",date:"9月7-9日",season:"autumn",desc:"白露时节，夜间气温骤降，清晨草木上可见白色露珠，故名白露。天气转凉，秋意渐浓，候鸟开始南飞。",foods:["龙眼","核桃","白果"],tips:["添衣保暖，勿露身体","滋阴养肺，预防秋燥","适当食用温补食物"],poem:"蒹葭苍苍，白露为霜。\n所谓伊人，在水一方。",poemAuthor:"《诗经·蒹葭》"},
+  {name:"秋分",date:"9月22-24日",season:"autumn",desc:"秋分日昼夜再次等长，此后夜长昼短。秋高气爽，丹桂飘香，正是赏秋的好时节。农谚云"秋分到，蛋儿俏"。",foods:["桂花","芋头","栗子"],tips:["阴阳平衡，早睡早起","防秋燥，多饮水润肺","适度运动，登高远眺"],poem:"金气秋分，风清露冷秋期半。\n凉蟾光满，桂子飘香远。",poemAuthor:"谢逸《点绛唇》"},
+  {name:"寒露",date:"10月8-9日",season:"autumn",desc:"寒露时节，露水增多且更凉。秋意更浓，菊花盛开，枫叶渐红。此时是登高赏秋的最佳时期。",foods:["山楂","柿子","菊花茶"],tips:["足部保暖，防寒从脚起","滋阴润肺，少食辛辣","赏菊登高，调畅情志"],poem:"袅袅凉风动，凄凄寒露零。\n兰衰花始白，荷破叶犹青。",poemAuthor:"白居易《池上》"},
+  {name:"霜降",date:"10月23-24日",season:"autumn",desc:"霜降是秋季最后一个节气，天气渐冷，开始有霜。草木凋零，万物收藏。此时正是赏红叶的好时节，漫山遍野层林尽染。",foods:["柿子","萝卜","牛肉"],tips:["注意保暖，预防感冒","进补养胃，食物宜温热","适当运动，增强免疫"],poem:"霜降碧天静，秋事促西风。\n寒声隐地初听，中夜入梧桐。",poemAuthor:"叶梦得《水调歌头》"},
+  {name:"立冬",date:"11月7-8日",season:"winter",desc:"立冬标志着冬季的开始，万物收藏，规避寒冷。民间有"立冬补冬"习俗，北方吃饺子，南方吃汤圆。",foods:["饺子","羊肉","白菜"],tips:["早睡晚起，养护阳气","温补为主，食物宜热","适当进补，储备能量"],poem:"冻笔新诗懒写，寒炉美酒时温。\n醉看墨花月白，恍疑雪满前村。",poemAuthor:"李白《立冬》"},
+  {name:"小雪",date:"11月22-23日",season:"winter",desc:"小雪时节，北方开始降雪，虽然雪量不大，但寒意渐浓。此时腌腊肉、酿新酒，为过冬做准备。",foods:["糯米饭","腊肉","红薯"],tips:["注意防寒保暖","多食温热食物，少食寒凉","保持室内通风，预防疾病"],poem:"片片互玲珑，飞扬玉漏终。\n乍微全满地，渐密更无风。",poemAuthor:"陈与义《咏小雪》"},
+  {name:"大雪",date:"12月6-8日",season:"winter",desc:"大雪时节，天气更加寒冷，降雪量增大。"瑞雪兆丰年"，大雪覆盖大地，预示来年丰收。此时万物沉寂，天地一片银装素裹。",foods:["羊肉汤","红枣","桂圆"],tips:["御寒保暖，重点护头脚","温补养肾，多食黑色食物","避免冬季抑郁，保持社交"],poem:"已讶衾枕冷，复见窗户明。\n夜深知雪重，时闻折竹声。",poemAuthor:"白居易《夜雪》"},
+  {name:"冬至",date:"12月21-23日",season:"winter",desc:"冬至是北半球白昼最短的一天，阴极之至，阳气始生。民间有"冬至大如年"之说，北方吃饺子，南方吃汤圆，阖家团圆。",foods:["饺子","汤圆","羊肉"],tips:["冬至养生重养肾","早睡晚起，保证睡眠","艾灸泡脚，温通经络"],poem:"天时人事日相催，冬至阳生春又来。\n刺绣五纹添弱线，吹葭六管动飞灰。",poemAuthor:"杜甫《小至》"},
+  {name:"小寒",date:"1月5-7日",season:"winter",desc:"小寒是气温最低的时节之一，"小寒大寒，冻成一团"。此时天寒地冻，但腊梅飘香，傲然绽放，给寒冬增添一抹亮色。",foods:["腊八粥","火锅","核桃"],tips:["防寒保暖，重点护心脑","温补肾阳，多食坚果","适当室内运动"],poem:"莫怪严凝切，春冬正月交。\n霜风连夜作，冰雪满村郊。",poemAuthor:"元稹《小寒》"},
+  {name:"大寒",date:"1月20-21日",season:"winter",desc:"大寒是全年最后一个节气，天气寒冷至极。但物极必反，寒尽春来。民间忙着除旧迎新，准备年货，迎接新春。",foods:["八宝饭","姜母茶","炖鸡汤"],tips:["注意心脑血管保健","饮食温润，忌生冷","调养精神，静待春来"],poem:"大寒须遣酒争豪，雪阵风旗战未销。\n春信渐回芳草地，万家灯火度元宵。",poemAuthor:"陆游《大寒出江陵西门》"}
+];
+
+const SEASON_ICONS = {spring:'🌸',summer:'☀️',autumn:'🍂',winter:'❄️'};
+const SEASON_NAMES = {spring:'春',summer:'夏',autumn:'秋',winter:'冬'};
+const SEASON_COLORS = {spring:'#2d6a4f',summer:'#e07a5f',autumn:'#d4a017',winter:'#4a6fa5'};
+
+// === Current term detection ===
+function getCurrentTermIndex() {
+  const now = new Date();
+  const md = (now.getMonth()+1)*100 + now.getDate();
+  const ranges = [
+    [204,218],[219,305],[306,320],[321,404],[405,419],[420,505],
+    [506,520],[521,605],[606,621],[622,707],[708,722],[723,807],
+    [808,822],[823,907],[908,922],[923,1008],[1009,1023],[1024,1107],
+    [1108,1122],[1123,1207],[1208,1221],[1222,105],[106,120],[121,203]
+  ];
+  for(let i=0;i<ranges.length;i++){
+    const [s,e]=ranges[i];
+    if(s<=e){ if(md>=s&&md<=e) return i; }
+    else { if(md>=s||md<=e) return i; }
+  }
+  return 0;
+}
+const currentIdx = getCurrentTermIndex();
+
+// === Wheel rendering ===
+function drawWheel(){
+  const canvas=document.getElementById('wheel-canvas');
+  const container=document.getElementById('wheel-container');
+  const size=container.clientWidth;
+  canvas.width=size*2; canvas.height=size*2;
+  canvas.style.width=size+'px'; canvas.style.height=size+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(2,2);
+  const cx=size/2, cy=size/2, r=size/2-40, innerR=size/2-80;
+  const slice=Math.PI*2/24;
+  TERMS.forEach((t,i)=>{
+    const startA=i*slice-Math.PI/2-slice/2;
+    const endA=startA+slice;
+    const midA=startA+slice/2;
+    const isCurrent=i===currentIdx;
+    // arc segment
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,startA,endA);
+    ctx.arc(cx,cy,innerR,endA,startA,true);
+    ctx.closePath();
+    const col=SEASON_COLORS[t.season];
+    ctx.fillStyle=isCurrent? col : col+'33';
+    ctx.fill();
+    ctx.strokeStyle=col+'88';
+    ctx.lineWidth=1;
+    ctx.stroke();
+    // text
+    const textR=(r+innerR)/2;
+    const tx=cx+Math.cos(midA)*textR;
+    const ty=cy+Math.sin(midA)*textR;
+    ctx.save();
+    ctx.translate(tx,ty);
+    ctx.rotate(midA+Math.PI/2);
+    ctx.fillStyle=isCurrent?'#fff':SEASON_COLORS[t.season];
+    ctx.font=(isCurrent?'bold ':'')+(size<400?'11':'13')+'px "Noto Serif SC",serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(t.name,0,0);
+    ctx.restore();
+    // glow for current
+    if(isCurrent){
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx,cy,r+4,startA,endA);
+      ctx.arc(cx,cy,innerR-4,endA,startA,true);
+      ctx.closePath();
+      ctx.shadowColor=col;
+      ctx.shadowBlur=15;
+      ctx.strokeStyle=col;
+      ctx.lineWidth=2;
+      ctx.stroke();
+      ctx.restore();
+    }
+  });
+  // center decor
+  const centerEl=document.getElementById('wheel-center-text');
+  centerEl.textContent=TERMS[currentIdx].name;
+}
+
+// Wheel click handler
+document.getElementById('wheel-canvas').addEventListener('click', function(e){
+  const rect=this.getBoundingClientRect();
+  const scaleX=this.width/2/rect.width, scaleY=this.height/2/rect.height;
+  const x=(e.clientX-rect.left)*scaleX, y=(e.clientY-rect.top)*scaleY;
+  const cx=this.width/4, cy=this.height/4;
+  const angle=Math.atan2(y-cy,x-cx);
+  let a=(angle+Math.PI/2+Math.PI*2)%(Math.PI*2);
+  const idx=Math.floor(a/(Math.PI*2/24));
+  if(idx>=0&&idx<24) openModal(idx);
+});
+
+// === Cards rendering ===
+function renderCards(){
+  const grid=document.getElementById('cards-grid');
+  grid.innerHTML='';
+  TERMS.forEach((t,i)=>{
+    const card=document.createElement('div');
+    card.className=`term-card ${t.season}${i===currentIdx?' current-term':''}`;
+    card.id=`card-${i}`;
+    card.setAttribute('data-season',t.season);
+    card.innerHTML=`
+      <div class="card-season-icon">${SEASON_ICONS[t.season]}</div>
+      <div class="card-name">${t.name}</div>
+      <div class="card-date">${t.date}</div>
+      <div class="card-desc">${t.desc.slice(0,50)}…</div>
+      <div class="card-foods">${t.foods.map(f=>`<span class="food-tag">${f}</span>`).join('')}</div>
+    `;
+    card.addEventListener('click',()=>openModal(i));
+    grid.appendChild(card);
+  });
+}
+
+// === Modal ===
+function openModal(idx){
+  const t=TERMS[idx];
+  const col=SEASON_COLORS[t.season];
+  document.getElementById('modal-body').innerHTML=`
+    <div class="modal-header" style="border-bottom-color:${col}33">
+      <div style="font-size:2.5rem">${SEASON_ICONS[t.season]}</div>
+      <div class="modal-name" style="color:${col}">${t.name}</div>
+      <div class="modal-date">${t.date} · ${SEASON_NAMES[t.season]}季</div>
+      <div class="modal-desc">${t.desc}</div>
+    </div>
+    <div class="modal-section">
+      <h3>🥬 时令食材</h3>
+      <ul>${t.foods.map(f=>`<li>${f}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>🧘 养生建议</h3>
+      <ul>${t.tips.map(tip=>`<li>${tip}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-poem" style="border-left-color:${col}">
+      <div class="poem-text">${t.poem}</div>
+      <div class="poem-author">—— ${t.poemAuthor}</div>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+document.getElementById('modal-close').addEventListener('click',closeModal);
+document.getElementById('modal-overlay').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
+function closeModal(){
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// === Filter ===
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    const season=this.dataset.season;
+    document.querySelectorAll('.term-card').forEach(card=>{
+      if(season==='all'||card.dataset.season===season){
+        card.classList.remove('card-hidden');
+      } else {
+        card.classList.add('card-hidden');
+      }
+    });
+  });
+});
+
+// === Particle Effects ===
+function createParticles(){
+  const container=document.getElementById('particles-container');
+  const season=TERMS[currentIdx].season;
+  const configs={
+    spring:{colors:['#ffb7c5','#ff9eb5','#ffc0cb'],count:25,sizeRange:[6,14],dur:[8,16]},
+    summer:{colors:['#ffe066','#ffd700','#ffec99'],count:20,sizeRange:[3,6],dur:[4,9]},
+    autumn:{colors:['#d4a017','#c8860b','#e6a817'],count:20,sizeRange:[8,16],dur:[7,14]},
+    winter:{colors:['#fff','#e8e8e8','#d0d0d0'],count:30,sizeRange:[3,8],dur:[6,12]}
+  };
+  const cfg=configs[season];
+  for(let i=0;i<cfg.count;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const size=cfg.sizeRange[0]+Math.random()*(cfg.sizeRange[1]-cfg.sizeRange[0]);
+    const dur=cfg.dur[0]+Math.random()*(cfg.dur[1]-cfg.dur[0]);
+    const color=cfg.colors[Math.floor(Math.random()*cfg.colors.length)];
+    p.style.cssText=`
+      width:${size}px;height:${size}px;
+      background:${color};
+      left:${Math.random()*100}%;
+      bottom:${-size}px;
+      opacity:${0.3+Math.random()*0.5};
+      animation-duration:${dur}s;
+      animation-delay:${Math.random()*dur}s;
+      ${season==='autumn'?'border-radius:40% 60% 60% 40%;':''}
+      ${season==='summer'?'box-shadow:0 0 '+(size*2)+'px '+color+';':''}
+    `;
+    container.appendChild(p);
+  }
+}
+
+// === Init ===
+window.addEventListener('DOMContentLoaded',()=>{
+  drawWheel();
+  renderCards();
+  createParticles();
+  // scroll to current card after a brief delay
+  setTimeout(()=>{
+    const el=document.getElementById(`card-${currentIdx}`);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },1500);
+});
+window.addEventListener('resize',drawWheel);
+</script>
+</body>
+</html>
